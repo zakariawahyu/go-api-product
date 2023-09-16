@@ -1,0 +1,22 @@
+AppVersion: 1.0.0
+
+Server:
+  Port: :8001
+  Development: true
+  ReadTimeout: 10
+  WriteTimeout: 5
+
+Mysql:
+  Host: localhost
+  Port: 3306
+  User: root
+  Password: masukdb
+  DbName: api_products
+  MaxIdleConnection: 10
+  MaxOpenConnection: 100
+
+Logger:
+  DisableCaller: false
+  DisableStacktrace: false
+  Encoding: json
+  Level: info
