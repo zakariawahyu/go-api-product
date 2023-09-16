@@ -52,3 +52,28 @@ func (u *productUsecase) GetByID(id int) (*entity.Product, error) {
 
 	return res, nil
 }
+
+func (u *productUsecase) Update(product entity.Product) (*entity.Product, error) {
+	if err := u.validate.Struct(&product); err != nil {
+		u.logger.Errorf("validate.Struct %v", err)
+		return nil, err
+	}
+
+	res, err := u.productRepo.Update(product)
+	if err != nil {
+		u.logger.Errorf("productRepo.Update %v", err)
+		return nil, err
+	}
+
+	return res, nil
+}
+
+func (u *productUsecase) Delete(id int) (*entity.Product, error) {
+	res, err := u.productRepo.Delete(id)
+	if err != nil {
+		u.logger.Errorf("productRepo.Delete")
+		return nil, err
+	}
+
+	return res, nil
+}

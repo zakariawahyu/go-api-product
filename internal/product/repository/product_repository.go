@@ -46,3 +46,21 @@ func (r *productRepository) GetBySlug(slug string) (*entity.Product, error) {
 
 	return &product, nil
 }
+
+func (r *productRepository) Update(product entity.Product) (*entity.Product, error) {
+	if err := r.db.Where("id = ?", product.ID).Updates(&product).First(&product); err.RowsAffected == 0 {
+		return nil, response.ErrNotFound
+	}
+
+	return &product, nil
+}
+
+func (r *productRepository) Delete(id int) (*entity.Product, error) {
+	product := entity.Product{}
+
+	if err := r.db.Where("id = ?", id).Delete(&product); err.RowsAffected == 0 {
+		return nil, response.ErrNotFound
+	}
+
+	return &product, nil
+}

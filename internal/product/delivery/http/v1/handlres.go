@@ -24,7 +24,7 @@ func NewProductHandlers(productUsecase product.ProductUsecase, logger logger.Log
 	}
 }
 
-func (p *productHandlers) Create(ctx echo.Context) error {
+func (p *productHandlers) CreateProduct(ctx echo.Context) error {
 	product := entity.Product{}
 
 	if err := ctx.Bind(&product); err != nil {
@@ -41,7 +41,7 @@ func (p *productHandlers) Create(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, response.NewSuccessResponse(res))
 }
 
-func (p *productHandlers) GetByID(ctx echo.Context) error {
+func (p *productHandlers) GetProductByID(ctx echo.Context) error {
 	id, _ := strconv.Atoi(ctx.Param("id"))
 
 	res, err := p.productUsecase.GetByID(id)
@@ -51,4 +51,35 @@ func (p *productHandlers) GetByID(ctx echo.Context) error {
 	}
 
 	return ctx.JSON(http.StatusOK, response.NewSuccessResponse(res))
+}
+
+func (p *productHandlers) UpdateProduct(ctx echo.Context) error {
+	product := entity.Product{}
+	id, _ := strconv.Atoi(ctx.Param("id"))
+
+	if err := ctx.Bind(&product); err != nil {
+		p.logger.Errorf("ctx.Bind: %v", err)
+		panic(err)
+	}
+
+	product.ID = int64(id)
+	res, err := p.productUsecase.Update(product)
+	if err != nil {
+		p.logger.Errorf("productUsecase.Update %v", err)
+		panic(err)
+	}
+
+	return ctx.JSON(http.StatusOK, response.NewSuccessResponse(res))
+}
+
+func (p *productHandlers) DeleteProduct(ctx echo.Context) error {
+	id, _ := strconv.Atoi(ctx.Param("id"))
+
+	_, err := p.productUsecase.Delete(id)
+	if err != nil {
+		p.logger.Errorf("productUsecase.Delete %v", err)
+		panic(err)
+	}
+
+	return ctx.JSON(http.StatusOK, response.NewSuccessResponse("Success delete item"))
 }
