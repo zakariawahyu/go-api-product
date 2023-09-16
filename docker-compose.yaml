@@ -1,0 +1,36 @@
+version: "3.5"
+services:
+  api_service:
+    container_name: api_service
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "7070:7070"
+    volumes:
+      - ./:/app
+    restart: always
+    environment:
+      - MYSQL_HOST=database
+      - MYSQL_PORT=3306
+    depends_on:
+      - database
+    networks:
+      - api_networks
+
+  database:
+    image: mysql:8.1
+    container_name: database
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: masukdb
+      MYSQL_DATABASE:  api_product
+    ports:
+      - "3306:3306"
+    networks:
+      - api_networks
+
+networks:
+  api_networks:
+    driver: bridge

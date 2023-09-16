@@ -73,5 +73,15 @@ func InitConfig() (*Config, error) {
 		return nil, err
 	}
 
+	mysqlHost := os.Getenv("MYSQL_HOST")
+	if mysqlHost != "" {
+		cfg.Mysql.Host = mysqlHost
+	}
+
+	mysqlPort := os.Getenv("MYSQL_PORT")
+	if mysqlPort != "" {
+		cfg.Mysql.Port = mysqlPort
+	}
+
 	return cfg, nil
 }

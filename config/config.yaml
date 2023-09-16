@@ -1,7 +1,7 @@
 AppVersion: 1.0.0
 
 Server:
-  Port: :8001
+  Port: :7070
   Development: true
   ReadTimeout: 10
   WriteTimeout: 5
@@ -11,7 +11,7 @@ Mysql:
   Port: 3306
   User: root
   Password: masukdb
-  DbName: api_products
+  DbName: api_product
   MaxIdleConnection: 10
   MaxOpenConnection: 100
 
