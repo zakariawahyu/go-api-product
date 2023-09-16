@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"github.com/zakariawahyu/go-api-product/config"
 	"github.com/zakariawahyu/go-api-product/internal/middleware"
@@ -37,8 +38,10 @@ func NewServer(log logger.Logger, cfg *config.Config, mysql *gorm.DB) *server {
 
 func (s *server) Run() error {
 	s.mw = middleware.NewEchoMiddleware(s.log, s.cfg)
+
+	validate := validator.New()
 	productRepository := repository.NewProductRepository(s.mysql)
-	prouctUsecase := usecase.NewProductUsecase(productRepository, s.log)
+	prouctUsecase := usecase.NewProductUsecase(productRepository, s.log, validate)
 	v1 := s.echo.Group("api/v1")
 	productHandlers := productsHandlerV1.NewProductHandlers(prouctUsecase, s.log, v1.Group("/product"))
 	productHandlers.MapRoutes()

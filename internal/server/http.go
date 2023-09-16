@@ -3,6 +3,7 @@ package server
 import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/zakariawahyu/go-api-product/pkg/response"
 	"net/http"
 	"strings"
 	"time"
@@ -28,6 +29,8 @@ func (s *server) runHttpServer() error {
 
 func (s *server) mapRoutes() {
 	s.echo.Use(s.mw.RequestLoggerMiddleware)
+
+	s.echo.HTTPErrorHandler = response.NewHttpErrorHandler(response.NewErrorStatusCodeMaps()).Handler
 	s.echo.Use(middleware.RecoverWithConfig(middleware.RecoverConfig{
 		StackSize:         stackSize,
 		DisablePrintStack: true,

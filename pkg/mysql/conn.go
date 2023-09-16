@@ -3,6 +3,7 @@ package mysql
 import (
 	"fmt"
 	"github.com/zakariawahyu/go-api-product/config"
+	"github.com/zakariawahyu/go-api-product/internal/entity"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -20,6 +21,7 @@ func NewDBConnection(cfg *config.Config) (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+	db.AutoMigrate(&entity.Product{})
 
 	sqlDB, err := db.DB()
 	if err != nil {

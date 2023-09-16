@@ -3,6 +3,7 @@ package middleware
 import (
 	"github.com/labstack/echo/v4"
 	"github.com/zakariawahyu/go-api-product/config"
+	"github.com/zakariawahyu/go-api-product/pkg/helpers"
 	"github.com/zakariawahyu/go-api-product/pkg/logger"
 	"time"
 )
@@ -33,7 +34,7 @@ func (m *echoMiddleware) RequestLoggerMiddleware(next echo.HandlerFunc) echo.Han
 		status := res.Status
 		size := res.Size
 		s := time.Since(start).String()
-		requestID := ctx.Response().Header().Get(echo.HeaderXRequestID)
+		requestID := helpers.GetRequestID(ctx)
 
 		m.log.Infof("RequestID: %s, Method: %s, URI: %s, Status: %v, Size: %v, Time: %s",
 			requestID, req.Method, req.URL, status, size, s)
