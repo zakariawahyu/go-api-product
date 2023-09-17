@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"github.com/gosimple/slug"
 	"github.com/zakariawahyu/go-api-product/internal/entity"
 	"github.com/zakariawahyu/go-api-product/pkg/response"
 	"gorm.io/gorm"
@@ -16,8 +15,6 @@ func NewProductRepository(db *gorm.DB) *productRepository {
 }
 
 func (r *productRepository) Create(product entity.Product) (*entity.Product, error) {
-	product.Slug = slug.Make(product.Name)
-	product.IsActive = true
 	if err := r.db.Create(&product).Error; err != nil {
 		return nil, err
 	}

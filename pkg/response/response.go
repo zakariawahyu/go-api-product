@@ -5,13 +5,13 @@ import (
 )
 
 type SuccessResponse struct {
-	Success bool        `json:"success"`
+	Success bool        `json:"success" example:"true"`
 	Code    int         `json:"code"`
 	Data    interface{} `json:"data"`
 }
 
 type ErrorResponse struct {
-	Success bool        `json:"success"`
+	Success bool        `json:"success" example:"false"`
 	Code    int         `json:"code"`
 	Errors  interface{} `json:"errors"`
 }

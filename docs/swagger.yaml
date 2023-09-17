@@ -1,0 +1,234 @@
+definitions:
+  dto.CreateProduct:
+    properties:
+      description:
+        maxLength: 500
+        minLength: 3
+        type: string
+      name:
+        maxLength: 250
+        minLength: 3
+        type: string
+      price:
+        type: number
+      rating:
+        maximum: 5
+        minimum: 0
+        type: integer
+      stock:
+        type: integer
+      variety:
+        type: string
+    required:
+    - description
+    - name
+    - price
+    - rating
+    - stock
+    - variety
+    type: object
+  dto.UpdateProduct:
+    properties:
+      description:
+        maxLength: 500
+        minLength: 3
+        type: string
+      name:
+        maxLength: 250
+        minLength: 3
+        type: string
+      price:
+        type: number
+      rating:
+        maximum: 5
+        minimum: 0
+        type: integer
+      stock:
+        type: integer
+      variety:
+        type: string
+    required:
+    - description
+    - name
+    - price
+    - rating
+    - stock
+    - variety
+    type: object
+  entity.Product:
+    properties:
+      created_at:
+        type: string
+      description:
+        maxLength: 500
+        minLength: 3
+        type: string
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      name:
+        maxLength: 250
+        minLength: 3
+        type: string
+      price:
+        type: number
+      rating:
+        maximum: 10
+        minimum: 0
+        type: integer
+      slug:
+        type: string
+      stock:
+        type: integer
+      updated_at:
+        type: string
+      variety:
+        type: string
+    required:
+    - description
+    - name
+    - price
+    - rating
+    - stock
+    - variety
+    type: object
+  response.ErrorResponse:
+    properties:
+      code:
+        type: integer
+      errors: {}
+      success:
+        example: false
+        type: boolean
+    type: object
+  response.SuccessResponse:
+    properties:
+      code:
+        type: integer
+      data: {}
+      success:
+        example: true
+        type: boolean
+    type: object
+info:
+  contact: {}
+paths:
+  /product:
+    post:
+      consumes:
+      - application/json
+      description: Create new single product
+      parameters:
+      - description: Create Product
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateProduct'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Product'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Create new product
+      tags:
+      - Products
+  /product/{id}:
+    delete:
+      description: Delete product by id
+      parameters:
+      - description: product id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Delete product by id
+      tags:
+      - Products
+    get:
+      description: Get single product by id
+      parameters:
+      - description: product id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Product'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Get product by id
+      tags:
+      - Products
+    put:
+      consumes:
+      - application/json
+      description: Update single product by id
+      parameters:
+      - description: product id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Create Product
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateProduct'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Product'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Update single product
+      tags:
+      - Products
+swagger: "2.0"

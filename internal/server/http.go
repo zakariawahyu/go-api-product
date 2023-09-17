@@ -3,6 +3,8 @@ package server
 import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	echoSwagger "github.com/swaggo/echo-swagger"
+	"github.com/zakariawahyu/go-api-product/docs"
 	"github.com/zakariawahyu/go-api-product/pkg/response"
 	"net/http"
 	"strings"
@@ -28,6 +30,13 @@ func (s *server) runHttpServer() error {
 }
 
 func (s *server) mapRoutes() {
+	docs.SwaggerInfo.Version = "1.0"
+	docs.SwaggerInfo.Title = "Product Api Services"
+	docs.SwaggerInfo.Description = "Product REST API."
+	docs.SwaggerInfo.Version = "1.0"
+	docs.SwaggerInfo.BasePath = "/api/v1/product"
+	s.echo.GET("/swagger/*", echoSwagger.WrapHandler)
+
 	s.echo.Use(s.mw.RequestLoggerMiddleware)
 
 	s.echo.HTTPErrorHandler = response.NewHttpErrorHandler(response.NewErrorStatusCodeMaps()).Handler

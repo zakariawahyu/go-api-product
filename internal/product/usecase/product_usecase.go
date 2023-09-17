@@ -3,6 +3,7 @@ package usecase
 import (
 	"github.com/go-playground/validator/v10"
 	"github.com/gosimple/slug"
+	"github.com/zakariawahyu/go-api-product/internal/dto"
 	"github.com/zakariawahyu/go-api-product/internal/entity"
 	"github.com/zakariawahyu/go-api-product/internal/product"
 	"github.com/zakariawahyu/go-api-product/pkg/logger"
@@ -23,17 +24,27 @@ func NewProductUsecase(productRepo product.ProductRepository, logger logger.Logg
 	}
 }
 
-func (u *productUsecase) Create(product entity.Product) (*entity.Product, error) {
-	if err := u.validate.Struct(&product); err != nil {
+func (u *productUsecase) Create(req dto.CreateProduct) (*entity.Product, error) {
+	if err := u.validate.Struct(&req); err != nil {
 		u.logger.Errorf("validate.Struct %v", err)
 		return nil, err
 	}
 
-	_, err := u.productRepo.GetBySlug(slug.Make(product.Name))
+	_, err := u.productRepo.GetBySlug(slug.Make(req.Name))
 	if err == nil {
 		return nil, response.ErrConflict
 	}
 
+	product := entity.Product{
+		Name:        req.Name,
+		Slug:        slug.Make(req.Name),
+		Description: req.Description,
+		Price:       req.Price,
+		Variety:     req.Variety,
+		Rating:      req.Rating,
+		Stock:       req.Stock,
+		IsActive:    true,
+	}
 	res, err := u.productRepo.Create(product)
 	if err != nil {
 		u.logger.Errorf("productRepo.Create %v", err)
@@ -53,10 +64,22 @@ func (u *productUsecase) GetByID(id int) (*entity.Product, error) {
 	return res, nil
 }
 
-func (u *productUsecase) Update(product entity.Product) (*entity.Product, error) {
-	if err := u.validate.Struct(&product); err != nil {
+func (u *productUsecase) Update(req dto.UpdateProduct, id int) (*entity.Product, error) {
+	if err := u.validate.Struct(&req); err != nil {
 		u.logger.Errorf("validate.Struct %v", err)
 		return nil, err
+	}
+
+	product := entity.Product{
+		ID:          int64(id),
+		Name:        req.Name,
+		Slug:        slug.Make(req.Name),
+		Description: req.Description,
+		Price:       req.Price,
+		Variety:     req.Variety,
+		Rating:      req.Rating,
+		Stock:       req.Stock,
+		IsActive:    true,
 	}
 
 	res, err := u.productRepo.Update(product)
