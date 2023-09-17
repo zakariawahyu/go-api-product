@@ -24,6 +24,25 @@ func NewProductHandlers(productUsecase product.ProductUsecase, logger logger.Log
 	}
 }
 
+// GetAllProduct Get all product
+// @Tags Products
+// @Summary Get all product
+// @Description Get all product
+// @Produce json
+// @Success 200 {object} entity.Product
+// @Failure 404 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
+// @Router /product [get]
+func (p *productHandlers) GetAllProduct(ctx echo.Context) error {
+	res, err := p.productUsecase.GetAll()
+	if err != nil {
+		p.logger.Errorf("productUsecase.GetAll: %v", err)
+		panic(err)
+	}
+
+	return ctx.JSON(http.StatusOK, response.NewSuccessResponse(res))
+}
+
 // CreateProduct Create product
 // @Tags Products
 // @Summary Create new product
@@ -117,7 +136,30 @@ func (p *productHandlers) UpdateProduct(ctx echo.Context) error {
 func (p *productHandlers) DeleteProduct(ctx echo.Context) error {
 	id, _ := strconv.Atoi(ctx.Param("id"))
 
-	_, err := p.productUsecase.Delete(id)
+	_, err := p.productUsecase.SoftDelete(id)
+	if err != nil {
+		p.logger.Errorf("productUsecase.Delete %v", err)
+		panic(err)
+	}
+
+	return ctx.JSON(http.StatusOK, response.NewSuccessResponse("Success delete item"))
+}
+
+// HardDeleteProduct Hard Delete product by id
+// @Tags Products
+// @Summary Hard Delete product by id
+// @Description Hard Delete product by id
+// @Produce json
+// @Param id path string true "product id"
+// @Success 200 {object} response.SuccessResponse
+// @Failure 404 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
+// @Router /product/{id}/hard-delete [delete]
+func (p *productHandlers) HardDeleteProduct(ctx echo.Context) error {
+	id, _ := strconv.Atoi(ctx.Param("id"))
+
+	p.logger.Info("AAAA")
+	_, err := p.productUsecase.HardDelete(id)
 	if err != nil {
 		p.logger.Errorf("productUsecase.Delete %v", err)
 		panic(err)

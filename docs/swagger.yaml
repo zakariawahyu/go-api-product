@@ -115,6 +115,26 @@ info:
   contact: {}
 paths:
   /product:
+    get:
+      description: Get all product
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Product'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Get all product
+      tags:
+      - Products
     post:
       consumes:
       - application/json
@@ -229,6 +249,33 @@ paths:
           schema:
             $ref: '#/definitions/response.ErrorResponse'
       summary: Update single product
+      tags:
+      - Products
+  /product/{id}/hard-delete:
+    delete:
+      description: Hard Delete product by id
+      parameters:
+      - description: product id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Hard Delete product by id
       tags:
       - Products
 swagger: "2.0"

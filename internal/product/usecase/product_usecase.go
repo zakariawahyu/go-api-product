@@ -24,6 +24,16 @@ func NewProductUsecase(productRepo product.ProductRepository, logger logger.Logg
 	}
 }
 
+func (u *productUsecase) GetAll() ([]*entity.Product, error) {
+	res, err := u.productRepo.GetAll()
+	if err != nil {
+		u.logger.Errorf("productRepo.GetAll %v", err)
+		return nil, err
+	}
+
+	return res, nil
+}
+
 func (u *productUsecase) Create(req dto.CreateProduct) (*entity.Product, error) {
 	if err := u.validate.Struct(&req); err != nil {
 		u.logger.Errorf("validate.Struct %v", err)
@@ -91,8 +101,18 @@ func (u *productUsecase) Update(req dto.UpdateProduct, id int) (*entity.Product,
 	return res, nil
 }
 
-func (u *productUsecase) Delete(id int) (*entity.Product, error) {
-	res, err := u.productRepo.Delete(id)
+func (u *productUsecase) SoftDelete(id int) (*entity.Product, error) {
+	res, err := u.productRepo.SoftDelete(id)
+	if err != nil {
+		u.logger.Errorf("productRepo.SoftDelete")
+		return nil, err
+	}
+
+	return res, nil
+}
+
+func (u *productUsecase) HardDelete(id int) (*entity.Product, error) {
+	res, err := u.productRepo.HardDelete(id)
 	if err != nil {
 		u.logger.Errorf("productRepo.Delete")
 		return nil, err
